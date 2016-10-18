@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 enum SubjectSet { math, english }
-//enum marks { bad = 0, good = 100}
+enum Marks {d = 2, c = 3, b = 4, a = 5}
 
 
 namespace c_sharp_labs

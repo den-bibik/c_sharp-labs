@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace c_sharp_labs
 {
-    class Person
+    class Person:IDeepCopy, IDate
     {
-        private string[] nm;
-        private System.DateTime birthday;
+        protected string[] nm;
+        protected System.DateTime birthday;
 
         public Person(string name =  "Default", string surname = "Default", int day = 1, int month = 1, int year = 1984)
         {
@@ -42,6 +42,8 @@ namespace c_sharp_labs
             }
         }
 
+        
+
         public override string ToString()
         {
             return nm[1] + " " + nm[0] + " " + birthday.ToShortDateString();
@@ -50,6 +52,24 @@ namespace c_sharp_labs
         public virtual String ToShortString()
         {
             return nm[1] + " " + nm[0][0];
+        }
+
+        public DateTime Date
+        {
+            get
+            {
+                return default(DateTime);
+            }
+
+            set
+            {
+                birthday = value;
+            }
+        }
+
+        public virtual object DeepCopy()
+        {
+            return default(object);
         }
 
     }

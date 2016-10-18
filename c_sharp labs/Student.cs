@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,39 +7,29 @@ using System.Threading.Tasks;
 
 namespace c_sharp_labs
 {
-    class Student
+    class Student:Person, IDate, IDeepCopy, IEnumerable
     {
-        private Person pers;
-        public int group { set; get; }
-        private Test[] test;
+        private List<Test> test;
+        private List<Exam> exam;
 
-        public Student(string surname = "Default", string name = "Default", DateTime birthday = default(DateTime), int group = 1)
+        public int group { set; get; }
+        public double res { get; }
+        public Student(string surname = "Default", string name = "Default", DateTime birthday = default(DateTime), int group = 1):
+            base(name, surname, birthday.Day, birthday.Month, birthday.Year)
         {
-            this.pers = new Person(name, surname, birthday.Day, birthday.Month, birthday.Year);
             this.group = group;
         }
 
-       public Person person{
-            get
-            {
-                return pers;
-            }
-            set
-            {
-                pers = value;
-            }
-        }
 
-        public Test[] testList
+        public List<Test> testList
         {
-            get
-            {
-                return test;
-            }
-            set
-            {
-                test = value;
-            }
+            get { return test; }
+            set { test = value; }
+        }
+        public List<Exam> examList
+        {
+            get { return exam; }
+            set { exam = value; }
         }
 
         public void AddTests(params Test[] par)
@@ -46,16 +37,34 @@ namespace c_sharp_labs
             test.Concat(par);
         }
 
+        public void AddExams(params Exam[] par)
+        {
+            exam.Concat(par);
+        }
+
         public override string ToString()
         {
-            string s = "tests:";
+            string tst = "tests:";
             foreach (Test t in test)
-                s = string.Concat(s, "\n" + test.ToString());
-            return pers.ToString() + " group:" + group.ToString() + s;
+                 tst = string.Concat(tst, "\n" + t.ToString());
+            string exm = "exams:";
+            foreach (Exam e in exam)
+                tst = string.Concat(exm, "\n" + e.ToString());
+
+            return base.ToString() + " group:" + group.ToString() + "average: " + res.ToString() + "\n" + tst + "\n" + exm;
         }
-        public string ToShortString()
+        public override string ToShortString()
         {
-            return pers.ToString() + " group:" + group.ToString();
+            return base.ToShortString() + " group:" + group.ToString() + "average: " + res.ToString();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return test.GetEnumerator();
+        }
+        public override object DeepCopy()
+        {
+            return default(object);
         }
     }
 }
