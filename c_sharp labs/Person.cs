@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace c_sharp_labs
 {
     class Person:IDeepCopy, IDate
     {
-        protected string[] nm;
+        protected string[] nm =new String[2];
         protected System.DateTime birthday;
 
         public Person(string name =  "Default", string surname = "Default", int day = 1, int month = 1, int year = 1984)
@@ -69,7 +65,7 @@ namespace c_sharp_labs
 
         public virtual object DeepCopy()
         {
-            return default(object);
+            return new Person(nm[0], nm[1], birthday.Day, birthday.Month, birthday.Year);
         }
 
     }

@@ -8,12 +8,12 @@ namespace c_sharp_labs
 {
     class Exam: IDate, IDeepCopy
     {
-        public SubjectSet subject { get; set; }
+        public SubjectSet subject { get; set; } = SubjectSet.math;
         public Marks mark { get; set;  }
         public DateTime Date { get; set; }
         public object DeepCopy()
         {
-            return default(object);
+            return new Exam(subject, mark, Date);
         }
 
         public Exam(SubjectSet s = SubjectSet.math, Marks m = Marks.b, DateTime d = default(DateTime))

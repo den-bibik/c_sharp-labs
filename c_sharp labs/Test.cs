@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace c_sharp_labs
 {
-    
+
     class Test:IDate
     {
         public SubjectSet subject { get; set; }
@@ -21,7 +17,11 @@ namespace c_sharp_labs
         }
         public override string ToString()
         {
-            return subject.ToString() + " " + pass.ToString() + " " + Date.ToString();
+            return subject.ToString() + " " + pass.ToString() + " " + Date.ToShortDateString();
+        }
+        public object DeepCopy()
+        {
+            return new Test(subject, pass, Date);
         }
 
     }
