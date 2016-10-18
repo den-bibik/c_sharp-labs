@@ -11,7 +11,17 @@ namespace c_sharp_labs
         private List<Exam> exam = new List<Exam>();
 
         public int group { set; get; }
-        public double res { get; }
+        public double res { get {
+                int i = 0;
+                int sum = 0;
+                foreach (Exam e in exam)
+                {
+                    i++;
+                    sum += (int)e.mark;
+                }
+                return (double)sum / (double)i;
+            }
+        }
         public Student(string surname = "Default", string name = "Default", DateTime birthday = default(DateTime), int group = 1):
             base(name, surname, birthday.Day, birthday.Month, birthday.Year)
         {
@@ -58,14 +68,15 @@ namespace c_sharp_labs
 
         public IEnumerator GetEnumerator()
         {
-            ISet<SubjectSet> s = null;
+            HashSet<SubjectSet> s = new HashSet<SubjectSet>();
             foreach(Exam e in exam) if(e.mark > Marks.d) s.Add(e.subject);
             foreach(Test t in test) if(t.pass && s.Contains(t.subject)) yield return t.subject;
         }
 
-        public IEnumerator<Exam> ExamEnumerator(DateTime before)
+        public IEnumerable ExamEnumerator(DateTime before)
         {
             foreach (Exam e in exam) if (e.Date <= before) yield return e;
+            yield break;
         }
         public override object DeepCopy()
         {

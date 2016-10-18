@@ -8,7 +8,7 @@ namespace c_sharp_labs
 {
     class Exam: IDate, IDeepCopy
     {
-        public SubjectSet subject { get; set; } = SubjectSet.math;
+        public SubjectSet subject { get; set; }
         public Marks mark { get; set;  }
         public DateTime Date { get; set; }
         public object DeepCopy()
