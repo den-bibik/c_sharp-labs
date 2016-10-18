@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace c_sharp_labs
 {
@@ -75,8 +74,7 @@ namespace c_sharp_labs
 
         public IEnumerable ExamEnumerator(DateTime before)
         {
-            foreach (Exam e in exam) if (e.Date <= before) yield return e;
-            yield break;
+            foreach (Exam e in exam) if (e.mark > Marks.d && e.Date <= before) yield return e;
         }
         public override object DeepCopy()
         {

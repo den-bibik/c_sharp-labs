@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
-enum SubjectSet { math, english }
+enum SubjectSet { math, english, smth }
 enum Marks {d = 2, c = 3, b = 4, a = 5}
 
 
@@ -15,12 +14,14 @@ namespace c_sharp_labs
             Student s = new Student();
             s.AddExams(
                 new Exam(SubjectSet.math, Marks.c, new DateTime(2012,1,1)),
-                new Exam(SubjectSet.english, Marks.d, new DateTime(2012, 1, 2))
+                new Exam(SubjectSet.english, Marks.d, new DateTime(2010, 1, 1)),
+                new Exam(SubjectSet.smth, Marks.c, new DateTime(2012, 1, 2))
             );
 
             s.AddTests(
                 new Test(SubjectSet.math, true, new DateTime(2011, 11, 1)),
-                new Test(SubjectSet.english, false, new DateTime(2011, 11, 15))
+                new Test(SubjectSet.english, true, new DateTime(2011, 11, 15)),
+                new Test(SubjectSet.smth, false, new DateTime(2011, 11, 15))
             );
             Console.WriteLine(s);
             Console.WriteLine();
