@@ -16,7 +16,7 @@ namespace c_sharp_labs
             return new Exam(subject, mark, Date);
         }
 
-        public Exam(SubjectSet s = SubjectSet.math, Marks m = Marks.b, DateTime d = default(DateTime))
+        public Exam(SubjectSet s = SubjectSet.math, Marks m = Marks.хор, DateTime d = default(DateTime))
         {
             subject = s;
             mark = m;

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace c_sharp_labs
 {
-    class Student:Person, IDate, IDeepCopy, IEnumerable
+    class Student:Person, IDate, IDeepCopy, IComparable<Student>, IComparer<Student>
     {
         private List<Test> test = new List<Test>();
         private List<Exam> exam = new List<Exam>();
@@ -68,13 +69,13 @@ namespace c_sharp_labs
         public IEnumerator GetEnumerator()
         {
             HashSet<SubjectSet> s = new HashSet<SubjectSet>();
-            foreach(Exam e in exam) if(e.mark > Marks.d) s.Add(e.subject);
+            foreach(Exam e in exam) if(e.mark > Marks.неуд) s.Add(e.subject);
             foreach(Test t in test) if(t.pass && s.Contains(t.subject)) yield return t.subject;
         }
 
         public IEnumerable ExamEnumerator(DateTime before)
         {
-            foreach (Exam e in exam) if (e.mark > Marks.d && e.Date <= before) yield return e;
+            foreach (Exam e in exam) if (e.mark > Marks.неуд && e.Date <= before) yield return e;
         }
         public override object DeepCopy()
         {
@@ -82,6 +83,16 @@ namespace c_sharp_labs
             foreach (Exam e in exam) tmp.AddExams((Exam)e.DeepCopy());
             foreach (Test t in test) tmp.AddTests((Test)t.DeepCopy());
             return tmp;
+        }
+
+        public int CompareTo(Student obj)
+        { 
+            return res.CompareTo(obj.res);
+        }
+
+        public int Compare(Student x, Student y)
+        {
+            return x.exam.Count.CompareTo(y.exam.Count);
         }
     }
 }
