@@ -9,13 +9,13 @@ namespace c_sharp_labs
 {
     class StudentList
     {
-        private System.Collections.Generic.List<Student> list= new System.Collections.Generic.List<Student>();
+        public System.Collections.Generic.List<Student> list= new System.Collections.Generic.List<Student>();
 
         public void AddDefaults()
         {
-            Student s = new Student();
+            Student s = new Student("Иванов", "Вася");
             s.AddExams(
-                new Exam(SubjectSet.math, Marks.уд, new DateTime(2012, 1, 1)),
+                new Exam(SubjectSet.math, Marks.уд, new DateTime(2012, 1, 2)),
                 new Exam(SubjectSet.english, Marks.неуд, new DateTime(2010, 1, 1))     
             );
 
@@ -25,12 +25,24 @@ namespace c_sharp_labs
                 new Test(SubjectSet.smth, false, new DateTime(2011, 11, 15))
             );
 
-            Student s1 = (Student)s.DeepCopy();
-            s1.examList[0].mark = Marks.отл;
-            s1.AddExams(new Exam(SubjectSet.smth, Marks.уд, new DateTime(2012, 1, 2)));
+            Student s1 = new Student("Королев", "Паша");
+            s1.AddExams(
+                new Exam(SubjectSet.math, Marks.уд, new DateTime(2012, 1, 2)),
+                new Exam(SubjectSet.english, Marks.отл, new DateTime(2010, 1, 1)),
+                new Exam(SubjectSet.english, Marks.хор, new DateTime(2010, 1, 1))
+            );
+
+            s1.AddTests(
+                new Test(SubjectSet.math, true, new DateTime(2011, 11, 1)),
+                new Test(SubjectSet.english, false, new DateTime(2020, 11, 15)),
+                new Test(SubjectSet.smth, true, new DateTime(2011, 1, 16))
+            );
+            Student s2 = new Student("Королев", "Иван");
+
 
             list.Add(s);
             list.Add(s1);
+            list.Add(s2);
 
         }
 
@@ -47,24 +59,16 @@ namespace c_sharp_labs
         {
             get
             {
-                foreach(Student s in list)
-                {
-                    bool ok = false;
-                    HashSet<DateTime> examDates = new HashSet<DateTime>();
-                    foreach (Exam e in s.examList)
-                    {
-                        if(e.mark > Marks.неуд)
-                        {
-                            if (examDates.Contains(e.Date))
-                            {
-                                ok = true;
-                                break;
-                            }
-                            examDates.Add(e.Date);
-                        }
-                    }
-                    if(ok) yield return s;
-                }
+                return
+                       from st in list
+                       where
+                           (from g in (from test in st.examList
+                                       where test.mark > Marks.неуд
+                                       select test.Date).GroupBy(x => x)
+                            where g.Count() > 1
+                            select g
+                            ).Count() > 0
+                       select st;
             }
         }
 
@@ -72,9 +76,9 @@ namespace c_sharp_labs
         {
             get
             {
-                list.Sort((x, y) => x.surname.CompareTo(y.surname));
-                foreach (Student s in list)
-                    yield return s;
+                return from x in list 
+                       orderby x.surname
+                       select x;
             }
         }
 
@@ -82,13 +86,8 @@ namespace c_sharp_labs
         {
             get
             {
-                list.Sort((x, y) => x.testList.Max(t => t.Date).CompareTo(y.testList.Max(t => t.Date)));
-                foreach (Student s in list)
-                {
-                    bool ok = true;
-                    foreach (Test t in s.testList) ok = ok && t.pass;
-                    if(ok) yield return s;
-                }
+                return from st in list where st.testList.Count > 0
+                       orderby(from test in st.testList where test.pass select test.Date).Max() select st;
             }
         }
 
@@ -96,7 +95,7 @@ namespace c_sharp_labs
         {
             get
             {
-                return list.GroupBy(s => s.testList.Sum(t => t.pass.CompareTo(true)));
+                return list.GroupBy(s => s.testList.Sum(t => Convert.ToInt32(t.pass)));
             }
         }
 
@@ -113,21 +112,27 @@ namespace c_sharp_labs
         {
             get
             {
-                return list.Max(x =>(x.examList.Max(y => y.Date)));
+                if (list.Count == 0) return new DateTime();
+                var query = from st in list
+                            from exam in st.examList
+                            where st.examList.Count > 0
+                            select exam.Date;
+
+                return query.Max();
             }
         }
 
-        public Student LastExamSrudent
+        public Student LastExamStudent
         {
             get
             {
-                DateTime maxDT = LastExam;
-                foreach (Student s in list)
-                {
-                    int examIndex = s.examList.FindIndex(y => y.Date == maxDT);
-                    if(examIndex != -1) return s;
-                }
-                return null;
+                DateTime LE = LastExam;
+                if (list.Count == 0) return null;
+                return (
+                    from st in list
+                    where st.examList.Count > 0
+                    where st.examList.Max(x => x.Date) == LE
+                    select st).Single();
             }
         }
 
@@ -135,18 +140,16 @@ namespace c_sharp_labs
         {
             get
             {
-                HashSet<SubjectSet> res = new HashSet<SubjectSet>();
-                HashSet<SubjectSet> notPassed = new HashSet<SubjectSet>();
-                foreach (Student s in list)
-                {
-                    foreach (Test t in s.testList)
-                    {
-                        res.Add(t.subject);
-                        if (!t.pass)
-                            notPassed.Add(t.subject);
-                    }
-                }
-                return new List<SubjectSet>(res.Except(notPassed));
+                var allSubj =
+                    (from st in list
+                    from test in st.testList
+                    select test).GroupBy(x => x.subject);
+                var res =
+                    from subj in allSubj
+                    where
+                           subj.Count(x => x.pass) == subj.Count()
+                    select subj.Key;
+                return res.ToList();                               
             }
         }
 
