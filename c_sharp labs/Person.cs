@@ -54,7 +54,7 @@ namespace c_sharp_labs
         {
             get
             {
-                return default(DateTime);
+                return birthday;
             }
 
             set

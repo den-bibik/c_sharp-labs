@@ -28,13 +28,13 @@ namespace c_sharp_labs
             Student s1 = new Student("Королев", "Паша");
             s1.AddExams(
                 new Exam(SubjectSet.math, Marks.уд, new DateTime(2012, 1, 2)),
-                new Exam(SubjectSet.english, Marks.отл, new DateTime(2010, 1, 1)),
-                new Exam(SubjectSet.english, Marks.хор, new DateTime(2010, 1, 1))
+                new Exam(SubjectSet.english, Marks.уд, new DateTime(2010, 1, 1)),
+                new Exam(SubjectSet.smth, Marks.хор, new DateTime(2010, 1, 1))
             );
 
             s1.AddTests(
                 new Test(SubjectSet.math, true, new DateTime(2011, 11, 1)),
-                new Test(SubjectSet.english, false, new DateTime(2020, 11, 15)),
+                new Test(SubjectSet.english, true, new DateTime(2020, 11, 15)),
                 new Test(SubjectSet.smth, true, new DateTime(2011, 1, 16))
             );
             Student s2 = new Student("Королев", "Иван");
@@ -128,11 +128,13 @@ namespace c_sharp_labs
             {
                 DateTime LE = LastExam;
                 if (list.Count == 0) return null;
-                return (
+                var query = 
                     from st in list
                     where st.examList.Count > 0
                     where st.examList.Max(x => x.Date) == LE
-                    select st).Single();
+                    select st;
+                if (query.Count() > 0) return query.ElementAt(0);
+                return null;
             }
         }
 
@@ -152,6 +154,31 @@ namespace c_sharp_labs
                 return res.ToList();                               
             }
         }
+
+        public IEnumerable<SubjectSet> PassedTestNotExams
+        {
+            get{
+                var allCondSubj = 
+                    from st in list
+                    from subj in
+                        Enumerable.Intersect<SubjectSet>(
+                            (from test in st.testList
+                            where test.pass
+                            select test.subject), 
+
+                            (from exam in st.examList
+                            where exam.mark == Marks.неуд
+                            select exam.subject)
+                        )
+                    select subj;
+                return 
+                    from gr in allCondSubj.GroupBy(x => x)
+                    select gr.Key;
+
+            }
+
+        }
+
 
     }
 }

@@ -22,7 +22,41 @@ namespace c_sharp_labs
                 return (double)sum / (double)i;
             }
         }
-        public Student(string surname = "Default", string name = "Default", DateTime birthday = default(DateTime), int group = 1):
+        public Student(int maxN, Random rnd)//random student
+        {
+            string[] names = { "Ivan", "Oleg", "Julia", "Kate", "Bob", "Alice" };
+            string[] surnames = { "Smith", "Ivanov", "Petrov", "Duran", "Dvacher"};
+            Array subjects = Enum.GetValues(typeof(SubjectSet));
+            Array markAr = Enum.GetValues(typeof(Marks));
+
+            this.name = names[rnd.Next(0, names.Length)];
+            this.surname = surnames[rnd.Next(0, surnames.Length)];
+            this.group = rnd.Next(20);
+            this.birthday = new DateTime(rnd.Next(1990, 1999), rnd.Next(1, 12), rnd.Next(1, 28));
+
+            for(int i = 0; i < rnd.Next(maxN); i++)
+            {
+                Exam s = new Exam(
+                    (SubjectSet)subjects.GetValue(rnd.Next(subjects.Length)),
+                    (Marks)markAr.GetValue(rnd.Next(markAr.Length)),
+                    new DateTime(rnd.Next(2010, 2015), rnd.Next(1, 12), rnd.Next(1, 28))
+                );
+                this.AddExams(s);
+            }
+
+            for (int i = 0; i < rnd.Next(maxN); i++)
+            {
+                Test s = new Test(
+                    (SubjectSet)subjects.GetValue(rnd.Next(subjects.Length)),
+                    rnd.NextDouble() < 0.2 ? true : false,
+                    new DateTime(rnd.Next(2010, 2015), rnd.Next(1, 12), rnd.Next(1, 28))
+                );
+                this.AddTests(s);
+            }
+
+        }
+
+        public Student(string surname = "Default", string name = "Default" , DateTime birthday = default(DateTime), int group = 1):
             base(name, surname, birthday.Day, birthday.Month, birthday.Year)
         {
             this.group = group;
