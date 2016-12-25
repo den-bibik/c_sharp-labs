@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lab_libary
 {
-    class SJournal
+    public class SJournal
     {
         private System.IO.StreamWriter stream;
         public SJournal(string fileName)

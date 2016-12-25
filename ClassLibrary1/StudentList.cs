@@ -12,7 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace lab_libary
 {
     [Serializable]
-    class StudentList: IDeepCopy
+    public class StudentList: IDeepCopy
     {
         public System.Collections.Generic.List<Student> list= new System.Collections.Generic.List<Student>();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using lab_libary;
 
 namespace App1
 {
@@ -10,6 +11,9 @@ namespace App1
     {
         static void Main(string[] args)
         {
+            StudentList st = new StudentList();
+
+            Console.ReadKey();
         }
     }
 }

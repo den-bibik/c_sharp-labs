@@ -3,7 +3,7 @@
 namespace lab_libary
 {
 
-    class Test:IDate
+    public class Test:IDate
     {
         public SubjectSet subject { get; set; }
         public bool pass { get; set; }

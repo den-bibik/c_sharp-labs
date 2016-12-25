@@ -2,10 +2,10 @@
 
 namespace lab_libary
 {
-    interface IDeepCopy
+    public interface IDeepCopy
     { object DeepCopy(); }
 
-    interface IDate
+    public interface IDate
     { DateTime Date { get; set; } }
 
 }

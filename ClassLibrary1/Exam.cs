@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace lab_libary
 {
+    public enum SubjectSet { math, english, smth }
+    public enum Marks { неуд = 2, уд = 3, хор = 4, отл = 5 }
+
     [Serializable]
-    enum SubjectSet { math, english, smth }
-    [Serializable]
-    enum Marks { неуд = 2, уд = 3, хор = 4, отл = 5 }
-    [Serializable]
-    class Exam: IDate, IDeepCopy
+    public class Exam: IDate, IDeepCopy
     {
         public SubjectSet subject { get; set; }
         public Marks mark { get; set;  }

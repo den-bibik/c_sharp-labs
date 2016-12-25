@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace lab_libary
 {
-    enum SearchMetod{byKey, byValue};
-    class SCollectionHandlerEventArgs<TKey>:System.EventArgs
+    public enum SearchMetod{byKey, byValue};
+    public class SCollectionHandlerEventArgs<TKey>:System.EventArgs
     {
         public TKey tKey { set; get; }
         public int searchTime { set; get; }

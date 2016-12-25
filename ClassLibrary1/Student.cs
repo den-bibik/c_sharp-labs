@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace lab_libary
 {
     [Serializable]
-    class Student:Person, IDate, IDeepCopy, IComparable<Student>, IComparer<Student>
+    public class Student:Person, IDate, IDeepCopy, IComparable<Student>, IComparer<Student>
     {
         private List<Test> test = new List<Test>();
         private List<Exam> exam = new List<Exam>();

@@ -2,9 +2,9 @@
 
 namespace lab_libary
 {
-    delegate void GroupChanged();
+    public delegate void GroupChanged();
     [Serializable]
-    class Person:IDeepCopy, IDate
+    public class Person:IDeepCopy, IDate
     {
         public event GroupChanged groupChanged;
         protected void onGroupChanged()
