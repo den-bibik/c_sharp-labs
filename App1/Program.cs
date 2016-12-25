@@ -11,7 +11,18 @@ namespace App1
     {
         static void Main(string[] args)
         {
-            StudentList st = new StudentList();
+            Student st = new Student(5, new Random());
+            Student st_copy = (Student)st.DeepCopy();
+            Console.WriteLine("Student");
+            Console.WriteLine(st);
+            Console.WriteLine("\n\ncopy");
+            Console.WriteLine(st_copy);
+
+            StudentList stlist = new StudentList();
+            stlist.AddDefaults();
+
+            StudentList.Save("../../../stlist", stlist);
+
 
             Console.ReadKey();
         }

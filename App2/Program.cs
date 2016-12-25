@@ -11,6 +11,9 @@ namespace App2
     {
         static void Main(string[] args)
         {
+            StudentList stlist = null;
+            StudentList.Load("../../../stlist", ref stlist);
+            Console.WriteLine(stlist);
             Console.ReadKey();
         }
     }

@@ -2,7 +2,7 @@
 
 namespace lab_libary
 {
-
+    [Serializable]
     public class Test:IDate
     {
         public SubjectSet subject { get; set; }

@@ -12,7 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace lab_libary
 {
     [Serializable]
-    public class StudentList: IDeepCopy
+    public class StudentList
     {
         public System.Collections.Generic.List<Student> list= new System.Collections.Generic.List<Student>();
 
@@ -61,27 +61,8 @@ namespace lab_libary
             return str;
         }
 
-        public object DeepCopy()
-        {
-            try
-            {
-                //MemoryStream ms = new MemoryStream();
-                MemoryStream ms = new MemoryStream();
-                BinaryFormatter binF = new BinaryFormatter();
-                binF.Serialize(ms, this);
 
-
-                ms.Seek(0, SeekOrigin.Begin);
-                StudentList st_copy = binF.Deserialize(ms) as StudentList;
-                return st_copy;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-        static bool Save(string filename, StudentList obj)
+        static public bool Save(string filename, StudentList obj)
         {
             try
             {
@@ -98,7 +79,7 @@ namespace lab_libary
                 return false;
             }
         }
-        static bool Load(string filename, ref StudentList obj)
+        static public bool Load(string filename, ref StudentList obj)
         {
             try
             {

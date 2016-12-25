@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace lab_libary
 {
@@ -121,10 +124,22 @@ namespace lab_libary
         }
         public override object DeepCopy()
         {
-            Student tmp = new Student(surname, name, birthday, group);
-            foreach (Exam e in exam) tmp.AddExams((Exam)e.DeepCopy());
-            foreach (Test t in test) tmp.AddTests((Test)t.DeepCopy());
-            return tmp;
+            try
+            {
+                MemoryStream ms = new MemoryStream();
+                BinaryFormatter binF = new BinaryFormatter();
+                binF.Serialize(ms, this);
+
+
+                ms.Seek(0, SeekOrigin.Begin);
+                Student st_copy = binF.Deserialize(ms) as Student;
+                return st_copy;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         public int CompareTo(Student obj)
