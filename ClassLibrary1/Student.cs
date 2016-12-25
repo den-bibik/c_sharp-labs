@@ -3,14 +3,22 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace c_sharp_labs
+namespace lab_libary
 {
+    [Serializable]
     class Student:Person, IDate, IDeepCopy, IComparable<Student>, IComparer<Student>
     {
         private List<Test> test = new List<Test>();
         private List<Exam> exam = new List<Exam>();
+        private int group_num;
 
-        public int group { set; get; }
+        public int group {
+            set {
+                group_num = value;
+                onGroupChanged();
+
+            }
+            get { return group_num; } }
         public double res { get {
                 int i = 0;
                 int sum = 0;
@@ -59,7 +67,7 @@ namespace c_sharp_labs
         public Student(string surname = "Default", string name = "Default" , DateTime birthday = default(DateTime), int group = 1):
             base(name, surname, birthday.Day, birthday.Month, birthday.Year)
         {
-            this.group = group;
+            this.group_num = group;
         }
 
 

@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
-namespace c_sharp_labs
+
+namespace lab_libary
 {
-    class StudentList
+    [Serializable]
+    class StudentList: IDeepCopy
     {
         public System.Collections.Generic.List<Student> list= new System.Collections.Generic.List<Student>();
 
@@ -55,6 +60,63 @@ namespace c_sharp_labs
             }
             return str;
         }
+
+        public object DeepCopy()
+        {
+            try
+            {
+                //MemoryStream ms = new MemoryStream();
+                MemoryStream ms = new MemoryStream();
+                BinaryFormatter binF = new BinaryFormatter();
+                binF.Serialize(ms, this);
+
+
+                ms.Seek(0, SeekOrigin.Begin);
+                StudentList st_copy = binF.Deserialize(ms) as StudentList;
+                return st_copy;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        static bool Save(string filename, StudentList obj)
+        {
+            try
+            {
+                //MemoryStream ms = new MemoryStream();
+                FileStream ms = File.Create(filename);
+                BinaryFormatter binF = new BinaryFormatter();
+                binF.Serialize(ms, obj);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        static bool Load(string filename, ref StudentList obj)
+        {
+            try
+            {
+                FileStream ms = File.OpenRead(filename);
+                BinaryFormatter binF = new BinaryFormatter();
+
+
+                ms.Seek(0, SeekOrigin.Begin);
+                obj = binF.Deserialize(ms) as StudentList;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
         public IEnumerable<Student> PassedOneDay
         {
             get

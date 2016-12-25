@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace c_sharp_labs
+namespace lab_libary
 {
     interface IDeepCopy
     { object DeepCopy(); }

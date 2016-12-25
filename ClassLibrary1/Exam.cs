@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace c_sharp_labs
+namespace lab_libary
 {
+    [Serializable]
+    enum SubjectSet { math, english, smth }
+    [Serializable]
+    enum Marks { неуд = 2, уд = 3, хор = 4, отл = 5 }
+    [Serializable]
     class Exam: IDate, IDeepCopy
     {
         public SubjectSet subject { get; set; }

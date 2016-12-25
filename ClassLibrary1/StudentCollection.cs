@@ -4,23 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace c_sharp_labs
+namespace lab_libary
 {
     enum SearchMetod{byKey, byValue};
     class SCollectionHandlerEventArgs<TKey>:System.EventArgs
     {
         public TKey tKey { set; get; }
-        public System.Diagnostics.Stopwatch searchTime { set; get; }
+        public int searchTime { set; get; }
         public bool searched { set; get; }
         public SearchMetod searchMetod { set; get;}
         public override string ToString()
         {
             string s =
                 "tkey: " + tKey.ToString() + "\n" +
-                "Время поиска: " + searchTime.Elapsed.ToString() + "\n" +
+                "Время поиска: " + searchTime.ToString() + "\n" +
                 "Найдено: " + searched.ToString() + "\n" +
                 "Способ поиска: " + searchMetod.ToString() + "\n";
             return s;
+ 
         }
 
     }
@@ -49,10 +50,10 @@ namespace c_sharp_labs
 
         }
         public void AddStudents(int n) {
-            Random rnd = new Random();
+            //Random rnd = new Random();
             for (int i = 0; i < n; i++)
             {
-                Student s = new Student(3, rnd);
+                Student s = new Student(i.ToString());
                 collection.Add(keySelector(s), s);
             }
 
@@ -61,10 +62,9 @@ namespace c_sharp_labs
             SCollectionHandlerEventArgs<TKey> arg = new SCollectionHandlerEventArgs<TKey>();
             arg.searchMetod = SearchMetod.byKey;
             arg.tKey = Key;
-            arg.searchTime = new System.Diagnostics.Stopwatch();
-            arg.searchTime.Start();
+            arg.searchTime = Environment.TickCount;
             arg.searched = collection.ContainsKey(Key);
-            arg.searchTime.Stop();
+            arg.searchTime = Environment.TickCount - arg.searchTime;
 
             ContainsStudentEvent(this, arg);
 
@@ -74,11 +74,14 @@ namespace c_sharp_labs
         {
             SCollectionHandlerEventArgs<TKey> arg = new SCollectionHandlerEventArgs<TKey>();
             arg.searchMetod = SearchMetod.byValue;
-            
-            arg.searchTime = new System.Diagnostics.Stopwatch();
+
+            /*arg.searchTime = new System.Diagnostics.Stopwatch();
             arg.searchTime.Start();
             arg.searched = collection.ContainsValue(st);
-            arg.searchTime.Stop();
+            arg.searchTime.Stop();*/
+            arg.searchTime = Environment.TickCount;
+            arg.searched = collection.ContainsValue(st);
+            arg.searchTime = Environment.TickCount - arg.searchTime;
             arg.tKey = keySelector(st);
 
             ContainsStudentEvent(this, arg);

@@ -1,9 +1,17 @@
 ﻿using System;
 
-namespace c_sharp_labs
+namespace lab_libary
 {
+    delegate void GroupChanged();
+    [Serializable]
     class Person:IDeepCopy, IDate
     {
+        public event GroupChanged groupChanged;
+        protected void onGroupChanged()
+        {
+            if(groupChanged != null)
+                groupChanged();
+        }
         protected string[] nm =new String[2];
         protected System.DateTime birthday;
 
@@ -18,6 +26,7 @@ namespace c_sharp_labs
         {
             set
             {
+                onGroupChanged();
                 nm[0] = value;
             }
             get
