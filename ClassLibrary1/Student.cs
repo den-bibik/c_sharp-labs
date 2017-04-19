@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace lab_libary
 {
     [Serializable]
-    public class Student:Person, IDate, IDeepCopy, IComparable<Student>, IComparer<Student>
+    public class Student: Person, IDate, IDeepCopy, IComparable<Student>, IComparer<Student>
     {
         private List<Test> test = new List<Test>();
         private List<Exam> exam = new List<Exam>();
@@ -19,7 +19,6 @@ namespace lab_libary
             set {
                 group_num = value;
                 onGroupChanged();
-
             }
             get { return group_num; } }
         public double res { get {
@@ -66,6 +65,14 @@ namespace lab_libary
             }
 
         }
+        public Student() :
+            base("Default", "Default", default(DateTime).Day, default(DateTime).Month, default(DateTime).Year)
+        {
+            foreach (SubjectSet s in Enum.GetValues(typeof(SubjectSet)))
+                this.AddExams(new Exam(s, Marks.не_сдавал));
+            this.group_num = 1;
+        }
+
 
         public Student(string surname = "Default", string name = "Default" , DateTime birthday = default(DateTime), int group = 1):
             base(name, surname, birthday.Day, birthday.Month, birthday.Year)

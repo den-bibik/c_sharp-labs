@@ -25,10 +25,10 @@ namespace lab_libary
         }
 
     }
-    delegate TKey KeySelector<TKey>(Person ps);
-    delegate void SCollectionHandler<TKey>(object source, SCollectionHandlerEventArgs<TKey> args);
+    public delegate TKey KeySelector<TKey>(Person ps);
+    public delegate void SCollectionHandler<TKey>(object source, SCollectionHandlerEventArgs<TKey> args);
 
-    class SCollection<TKey>
+    public class SCollection<TKey>
     {
         private Dictionary<TKey, Student> collection;
         private KeySelector<TKey> keySelector;

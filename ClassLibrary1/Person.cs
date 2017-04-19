@@ -13,7 +13,7 @@ namespace lab_libary
                 groupChanged();
         }
         protected string[] nm =new String[2];
-        protected System.DateTime birthday;
+        public System.DateTime birthday { set; get; }
 
         public Person(string name =  "Default", string surname = "Default", int day = 1, int month = 1, int year = 1984)
         {

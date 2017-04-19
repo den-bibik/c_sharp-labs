@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace lab_libary
 {
     public enum SubjectSet { math, english, smth }
-    public enum Marks { неуд = 2, уд = 3, хор = 4, отл = 5 }
+    public enum Marks {не_сдавал = 0, неуд = 2, уд = 3, хор = 4, отл = 5 }
 
     [Serializable]
     public class Exam: IDate, IDeepCopy
