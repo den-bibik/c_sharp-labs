@@ -20,6 +20,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace GuiApp
 {
@@ -34,15 +35,17 @@ namespace GuiApp
         }
         public void Save(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            Nullable<bool> result = dlg.ShowDialog();
-            if (result == true)
-            {
-                FileStream fs = new FileStream(dlg.FileName, FileMode.Create);
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fs, soc);
-            }
-            soc.changed = false;
+                
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                Nullable<bool> result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    FileStream fs = new FileStream(dlg.FileName, FileMode.Create);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(fs, soc);
+                }
+                soc.changed = false;
+ 
         }
         public void New(object sender, ExecutedRoutedEventArgs e)
         {
@@ -59,6 +62,7 @@ namespace GuiApp
         }
         public void Open(object sender, ExecutedRoutedEventArgs e)
         {
+           
             if (soc.changed == true)
             {
                 if (MessageBox.Show("Сохранить?", "Confirm", MessageBoxButton.YesNo).ToString() == "Yes")
@@ -69,16 +73,28 @@ namespace GuiApp
 
             }
 
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            Nullable<bool> result = dlg.ShowDialog();
-            if (result == true)
+            FileStream fs = null;
+            try
             {
-                FileStream fs = new FileStream(dlg.FileName, FileMode.Open);
-                BinaryFormatter formatter = new BinaryFormatter();
-                soc = (StudentObservableCollection)formatter.Deserialize(fs);
-                
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                Nullable<bool> result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    fs = new FileStream(dlg.FileName, FileMode.Open);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    soc = (StudentObservableCollection)formatter.Deserialize(fs);
+
+                }
+                soc.changed = false;
             }
-            soc.changed = false;
+            catch
+            {
+                MessageBox.Show("Error");
+            }
+            finally
+            {
+                if (fs != null) fs.Close();
+            }
         }
         private void Remove(object sender, ExecutedRoutedEventArgs e)
         {
@@ -106,15 +122,27 @@ namespace GuiApp
                 s.CollectionChanged += this.OnCollectionChanged;
             }
         }
- 
+        void OnClose(object sender, EventArgs e)
+        {
+            if (soc.changed == true)
+            {
+                if (MessageBox.Show("Сохранить?", "Confirm", MessageBoxButton.YesNo).ToString() == "Yes")
+                {
+                    Save(null, null);
+                }
+
+            }
+        }
 
         public static Array MarksArray { set; get; } = Enum.GetValues(typeof(Marks));
         public MainWindow()
-        {   
+        {
+            
             soc = new StudentObservableCollection();
             
             //soc.Add_DefaultStudent(7);
             InitializeComponent();
+            this.Closed += OnClose;
             //lst.ItemsSource = soc;
         }
       
